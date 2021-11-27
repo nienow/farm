@@ -1,7 +1,8 @@
 import {
 	createContext,
 	FC,
-	useContext
+	useContext,
+	useReducer
 } from 'react';
 
 interface DebugLog {
@@ -14,24 +15,21 @@ interface IDebugContext {
 	addLog: (l: string) => void;
 }
 
-const defaultState: IDebugContext = {
+const DebugContext = createContext<IDebugContext>({
 	logs: [],
 	addLog: () => {}
-};
-
-const DebugContext = createContext<IDebugContext>(defaultState);
+});
 
 export const useDebug = () => useContext(DebugContext);
 
 export const DebugProvider: FC = ({ children }) => {
-	const logs: DebugLog[] = [];
-
-	const addLog = (l: string) => {
-		logs.push({log: l, ts: new Date()})
-	};
+	const [ logs, addLog ] = useReducer(
+		(logs, newLog) => ([{log: newLog, ts: new Date()}, ...logs]),
+		[]
+	)
 
 	return (
-		<DebugContext.Provider value={{logs, addLog}}>
+		<DebugContext.Provider value={{ logs, addLog }}>
 			{children}
 		</DebugContext.Provider>
 	);

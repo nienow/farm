@@ -1,6 +1,5 @@
-import React, { ReactNode } from 'react'
-import Head from 'next/head'
-import AccountDetails from './AccountDetails';
+import React, { ReactNode } from 'react';
+import Head from 'next/head';
 import Account from './Account';
 import { useWalletConnect } from '../hooks/walletConnect';
 import DebugLogs from './DebugLogs';

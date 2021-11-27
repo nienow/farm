@@ -1,5 +1,5 @@
-import useSWR from "swr";
-import useTokenContract from "./useTokenContract";
+import useSWR from 'swr';
+import useTokenContract from './useTokenContract';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 

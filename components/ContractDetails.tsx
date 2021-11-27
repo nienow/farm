@@ -1,51 +1,47 @@
 import * as React from 'react';
 import { Farm } from '../interfaces';
-import { SITES } from '../data/sites';
-import useContract from '../hooks/useContract';
 import { parseBalance } from '../utils';
-import useTokenBalance from '../hooks/useTokenBalance';
-import { useWeb3React } from '@web3-react/core';
-import { Web3Provider } from '@ethersproject/providers';
-import { useDebug } from '../providers/DebugProvider';
-import usePendingReward2 from '../hooks/usePendingReward2';
+import usePendingReward from '../hooks/usePendingReward';
+import useHarvest from '../hooks/useHarvest';
+import styled from 'styled-components';
+import ActionButton from './ActionButton';
 
 type Props = {
   farm: Farm
 }
 
+const ContractContainer = styled.div`
+  border: 1px solid #222;
+  margin: 10px;
+  width: 200px;
+`
+
+const ContractTitle = styled.div`
+  font-size: 20px;
+  text-align: center;
+  background-color: #222;
+  color: white;
+  padding: 10px 0;
+`
+
+const ContractContent = styled.div`
+  padding: 10px;
+`
+
 const ContractDetails = ({ farm }: Props) => {
-  const site = SITES[farm.site];
-  const chef = useContract(site.chef, site.chefAbi);
-  const router = useContract(site.router, site.routerAbi);
-  const { pending, value, bestRoute } = usePendingReward2(farm);
-  const { balance } = useTokenBalance(site.token);
-  const { account } = useWeb3React<Web3Provider>();
-  const { addLog } = useDebug();
+  const { pending, value } = usePendingReward(farm);
 
-  function harvest() {
-    if (chef) {
-      chef.deposit(farm.pid, '0', '0x0000000000000000000000000000000000000000');
-      addLog('Harvest');
-    }
-  }
+  const { harvest } = useHarvest(farm);
 
-  function sell() {
-    if (router && bestRoute) {
-      const deadline = `0x${(Math.floor(new Date().getTime() / 1000) + 60 * 20).toString(16)}`
-      const minOut = value * 0.96;
-      router.swapExactTokensForTokensSupportingFeeOnTransferTokens(balance, minOut, bestRoute, account, deadline);
-      addLog('Sell');
-    }
-  }
 
-  return <div>
-    <h1>{farm.name}</h1>
-    <div>Pending: {parseBalance(pending ?? 0)}</div>
-    <div>Pending Value: {parseBalance(value ?? 0)}</div>
-    <button onClick={harvest}>Harvest</button>
-    <div>Wallet: {parseBalance(balance ?? 0)}</div>
-    <button onClick={sell}>Sell</button>
-  </div>
+
+  return <ContractContainer>
+    <ContractTitle>{farm.name}</ContractTitle>
+    <ContractContent>
+      <div>Pending: ${parseBalance(value ?? 0)}</div>
+      <ActionButton onClick={ harvest } disabled={ pending == 0 }>Harvest</ActionButton>
+    </ContractContent>
+  </ContractContainer>
 }
 
 export default ContractDetails

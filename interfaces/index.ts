@@ -14,5 +14,6 @@ export type Site = {
   chefAbi: ContractAbi,
   token: ContractAddress,
   router: ContractAddress,
-  routerAbi: ContractAbi
+  routerAbi: ContractAbi,
+  referral?: boolean;
 }

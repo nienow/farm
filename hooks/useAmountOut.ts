@@ -4,10 +4,14 @@ import {
   BigNumberish,
   Contract
 } from 'ethers';
+import { parseEther } from '@ethersproject/units';
 
-function getAmountOut(contract: any) {
+const oneEther = parseEther('1');
+console.log(oneEther);
+
+function getAmountOut(contract: Contract) {
   return (...route: string[]) => {
-    return contract.getAmountsOut(1, route).then((result: BigNumberish[]) => result[result.length - 1]);
+    return contract.getAmountsOut(oneEther, route).then((result: BigNumberish[]) => result[result.length - 1]);
   };
 }
 
@@ -16,8 +20,8 @@ export default function useAmountOut(
   route: ContractAddress[]
 ) {
   const result = useSWR(
-    route,
+    router ? route: null,
     getAmountOut(router)
   );
-  return result.data;
+  return { amount: result.data };
 }

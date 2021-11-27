@@ -3,19 +3,22 @@ import {
   Farm
 } from '../interfaces';
 import ContractDetails from './ContractDetails';
+import styled from 'styled-components';
 
 type Props = {
   items: Farm[]
 }
 
+const ContractsContainer = styled.div`
+  display: flex;
+`
+
 const Contracts = ({ items }: Props) => (
-  <ul>
+  <ContractsContainer>
     {items.map((item) => (
-      <li key={item.id}>
-        <ContractDetails farm={item} />
-      </li>
+      <ContractDetails key={item.id} farm={item} />
     ))}
-  </ul>
+  </ContractsContainer>
 )
 
 export default Contracts

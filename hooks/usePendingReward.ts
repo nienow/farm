@@ -1,26 +1,45 @@
-import useSWR from "swr";
 import { Farm } from '../interfaces';
 import useContract from './useContract';
 import { SITES } from '../data/sites';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-
-function getTokenBalance(contract: any) {
-  return (pid: number, address: string) => {
-    return contract.pendingPanther(pid, address);
-  };
-}
+import {
+  BigNumber,
+  BigNumberish
+} from 'ethers';
+import {
+  useEffect,
+  useState
+} from 'react';
+import { useDebug } from '../providers/DebugProvider';
+import useTokenPrice from './useTokenPrice';
 
 export default function usePendingReward(
   farm: Farm
 ) {
   const site = SITES[farm.site];
-  const c = useContract(site.chef, site.chefAbi);
+  const chef = useContract(site.chef, site.chefAbi);
+  const router = useContract(site.router, site.routerAbi);
   const { account } = useWeb3React<Web3Provider>();
+  const [pending, setPending] = useState<BigNumberish>(0);
+  const { addLog } = useDebug();
+  const { price, bestRoute } = useTokenPrice(site);
+  const [ value, setValue ] = useState<BigNumberish>(0);
 
-  const result = useSWR(
-    [farm.pid, account],
-    getTokenBalance(c)
-  );
-  return {pending: result.data};
+  useEffect(() => {
+    if (chef && router) {
+      addLog('fetching pending for ' + farm.pid);
+      chef.pendingPanther(farm.pid, account).then((balance: BigNumberish) => {
+        setPending(balance);
+      });
+    }
+  }, [chef, router]);
+
+  useEffect(() => {
+    if (pending && price) {
+      setValue((pending as BigNumber).mul(price).div(BigNumber.from('1000000000000000000')));
+    }
+  }, [pending, price]);
+
+  return {pending, price, value, bestRoute};
 }
