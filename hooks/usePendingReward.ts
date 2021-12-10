@@ -20,7 +20,6 @@ export default function usePendingReward(
 ) {
   const site = SITES[farm.site];
   const chef = useContract(site.chef, site.chefAbi);
-  const router = useContract(site.router, site.routerAbi);
   const { account } = useWeb3React<Web3Provider>();
   const [pending, setPending] = useState<BigNumberish>(0);
   const { addLog } = useDebug();
@@ -28,13 +27,13 @@ export default function usePendingReward(
   const [ value, setValue ] = useState<BigNumberish>(0);
 
   useEffect(() => {
-    if (chef && router) {
+    if (chef) {
       addLog('fetching pending for ' + farm.pid);
       chef.pendingPanther(farm.pid, account).then((balance: BigNumberish) => {
         setPending(balance);
       });
     }
-  }, [chef, router]);
+  }, [chef]);
 
   useEffect(() => {
     if (pending && price) {

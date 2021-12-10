@@ -9,7 +9,6 @@ export const SITES: {[key: string]: Site} = {
 		chefAbi: pantherChefAbi,
 		token: '0x1f546ad641b56b86fd9dceac473d1c7a357276b7',
 		router: '0x24f7C33ae5f77e2A9ECeed7EA858B4ca2fa1B7eC',
-		routerAbi: pantherRouterAbi,
-		referral: true
+		routerAbi: pantherRouterAbi
 	}
-}
+} as any;

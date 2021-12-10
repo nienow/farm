@@ -1,8 +1,14 @@
+import {BigNumber} from "ethers";
+
 export type Farm = {
-  id: number
-  name: string
-  site: string
+  // id: number
+  name?: string
+  chef: ContractAddress;
   pid: number;
+  lpToken: ContractAddress;
+  allocPoint: BigNumber;
+  depositFeeBP: number;
+  harvestInterval: BigNumber;
 }
 
 export type ContractAddress = string;
@@ -15,5 +21,19 @@ export type Site = {
   token: ContractAddress,
   router: ContractAddress,
   routerAbi: ContractAbi,
-  referral?: boolean;
+  referralRate?: number;
+  tokenPerBlock: BigNumber;
+  totalAllocPoint: BigNumber;
+  bonusMultiplier?: BigNumber;
+  maxDepositFee?: BigNumber;
+  maxReferralRate?: BigNumber;
+  maxHarvestInterval?: BigNumber;
+  farms: Farm[];
+}
+
+export type PoolInfo = {
+  lpToken: string;
+  allocPoint: BigNumber;
+  depositFeeBP: number;
+  harvestInterval: BigNumber;
 }
