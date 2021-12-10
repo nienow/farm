@@ -3,6 +3,7 @@ import { SITES } from '../data/sites';
 import useContract from './useContract';
 import { useCallback } from 'react';
 import { useDebug } from '../providers/DebugProvider';
+import {AddressZero} from "@ethersproject/constants";
 
 export default function useHarvest(farm: Farm) {
 	const { addLog } = useDebug();
@@ -13,7 +14,7 @@ export default function useHarvest(farm: Farm) {
 		if ( chef) {
 			let harvestPromise;
 			if (site.referral) {
-				harvestPromise = chef.deposit(farm.pid, '0', '0x0000000000000000000000000000000000000000');
+				harvestPromise = chef.deposit(farm.pid, '0', AddressZero);
 			} else {
 				harvestPromise = chef.deposit(farm.pid, '0');
 			}

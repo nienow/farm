@@ -11,6 +11,7 @@ import {
   BigNumberish
 } from 'ethers';
 import { Site } from '../interfaces';
+import {WeiPerEther} from "@ethersproject/constants";
 
 export default function useWalletValue(
   site: Site
@@ -31,7 +32,7 @@ export default function useWalletValue(
 
   useEffect(() => {
     if (balance && price) {
-      setValue((balance as BigNumber).mul(price).div(BigNumber.from('1000000000000000000')));
+      setValue((balance as BigNumber).mul(price).div(WeiPerEther));
     }
   }, [balance, price]);
 

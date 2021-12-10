@@ -13,6 +13,7 @@ import {
 } from 'react';
 import { useDebug } from '../providers/DebugProvider';
 import useTokenPrice from './useTokenPrice';
+import {WeiPerEther} from "@ethersproject/constants";
 
 export default function usePendingReward(
   farm: Farm
@@ -37,7 +38,7 @@ export default function usePendingReward(
 
   useEffect(() => {
     if (pending && price) {
-      setValue((pending as BigNumber).mul(price).div(BigNumber.from('1000000000000000000')));
+      setValue((pending as BigNumber).mul(price).div(WeiPerEther));
     }
   }, [pending, price]);
 
