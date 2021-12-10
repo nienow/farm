@@ -11,6 +11,7 @@ type Props = {
 const Button = styled.button`
   padding: 10px 20px;
   cursor: pointer;
+  width: 100%;
 `
 
 const ActionButton = ({ children, onClick, disabled }: Props) => (

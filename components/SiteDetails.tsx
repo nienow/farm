@@ -1,48 +1,35 @@
 import * as React from 'react';
-import { Site } from '../interfaces';
+import {Site} from '../interfaces';
 import styled from 'styled-components';
 import useTokenPrice from '../hooks/useTokenPrice';
-import { parseBalance } from '../utils';
+import {parseBalance} from '../utils';
 import ActionButton from './ActionButton';
 import useWalletValue from '../hooks/useWalletValue';
 import useSell from '../hooks/useSell';
-import {formatEther, formatUnits} from "@ethersproject/units";
+import ContractProperty from "./ContractProperty";
+import VerticalSpacer from "./util/VerticalSpacer";
+import Card from "./card/Card";
+import CardTitle from "./card/CardTitle";
+import CardContent from "./card/CardContent";
 
 type Props = {
-  site: Site
+	site: Site
 }
 
-const SiteContainer = styled.div`
-  border: 1px solid #222;
-  margin: 10px;
-  width: 200px;
-`
+const SiteDetails = ({site}: Props) => {
+	const {price} = useTokenPrice(site);
+	const {balance, value: walletValue} = useWalletValue(site);
+	const {sellToken} = useSell(site, balance);
 
-const SiteTitle = styled.div`
-  font-size: 20px;
-  text-align: center;
-  background-color: #222;
-  color: white;
-  padding: 10px 0;
-`
-
-const SiteContent = styled.div`
-  padding: 10px;
-`
-
-const SiteDetails = ({ site }: Props) => {
-  const { price } = useTokenPrice(site);
-  const { balance, value: walletValue } = useWalletValue(site);
-  const { sellToken } = useSell(site, balance);
-
-  return <SiteContainer>
-    <SiteTitle>{site.name}</SiteTitle>
-    <SiteContent>
-      <div>Price: ${parseBalance(price ?? 0)}</div>
-      <div>Wallet: ${parseBalance(walletValue ?? 0)}</div>
-      <ActionButton onClick={ sellToken } disabled={balance == 0}>Sell</ActionButton>
-    </SiteContent>
-  </SiteContainer>
+	return <Card>
+		<CardTitle>{site.name}</CardTitle>
+		<CardContent>
+			<ContractProperty title="Price" value={'$' + parseBalance(price ?? 0)}></ContractProperty>
+			<ContractProperty title="Wallet" value={'$' + parseBalance(walletValue ?? 0)}></ContractProperty>
+			<VerticalSpacer size={10}></VerticalSpacer>
+			<ActionButton onClick={sellToken} disabled={balance == 0}>Sell</ActionButton>
+		</CardContent>
+	</Card>
 }
 
 export default SiteDetails

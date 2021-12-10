@@ -11,8 +11,6 @@ type Props = {
 
 
 const Layout = ({ children, title = 'Farm @ Home' }: Props) => {
-  const walletConnect = useWalletConnect();
-
   return <div>
     <Head>
       <title>{title}</title>
@@ -25,7 +23,7 @@ const Layout = ({ children, title = 'Farm @ Home' }: Props) => {
       {/*    <a>Home</a>*/}
       {/*  </Link>*/}
       {/*</nav>*/}
-      <Account triedToEagerConnect={walletConnect}></Account>
+      <Account></Account>
     </header>
     {children}
     <footer>
