@@ -1,11 +1,10 @@
-import { Farm } from '../interfaces';
-import { SITES } from '../data/sites';
+import {SITES} from '../data/sites';
 import useContract from './useContract';
-import { useCallback } from 'react';
-import { useDebug } from '../providers/DebugProvider';
+import {useCallback} from 'react';
+import {useDebug} from '../providers/DebugProvider';
 import {AddressZero} from "@ethersproject/constants";
 
-export default function useHarvest(farm: Farm) {
+export default function useHarvest(farm: any) {
 	const { addLog } = useDebug();
 	const site = SITES[farm.site];
 	const chef = useContract(site.chef, site.chefAbi);
@@ -13,7 +12,7 @@ export default function useHarvest(farm: Farm) {
 	const harvest = useCallback(() => {
 		if ( chef) {
 			let harvestPromise;
-			if (site.referral) {
+			if (site.referralRate) {
 				harvestPromise = chef.deposit(farm.pid, '0', AddressZero);
 			} else {
 				harvestPromise = chef.deposit(farm.pid, '0');

@@ -1,7 +1,6 @@
-import React, { ReactNode } from 'react';
+import React, {ReactNode} from 'react';
 import Head from 'next/head';
 import Account from './Account';
-import { useWalletConnect } from '../hooks/walletConnect';
 import DebugLogs from './DebugLogs';
 
 type Props = {

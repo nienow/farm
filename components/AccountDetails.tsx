@@ -3,7 +3,6 @@ import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
 
 const AccountDetails = () => {
-	useWalletConnect();
 	const { account } = useWeb3React()
 
 	const [address, setAddress] = React.useState('')

@@ -1,22 +1,15 @@
-import { Farm } from '../interfaces';
 import useContract from './useContract';
-import { SITES } from '../data/sites';
-import { useWeb3React } from '@web3-react/core';
-import { Web3Provider } from '@ethersproject/providers';
-import {
-  BigNumber,
-  BigNumberish
-} from 'ethers';
-import {
-  useEffect,
-  useState
-} from 'react';
-import { useDebug } from '../providers/DebugProvider';
+import {SITES} from '../data/sites';
+import {useWeb3React} from '@web3-react/core';
+import {Web3Provider} from '@ethersproject/providers';
+import {BigNumber, BigNumberish} from 'ethers';
+import {useEffect, useState} from 'react';
+import {useDebug} from '../providers/DebugProvider';
 import useTokenPrice from './useTokenPrice';
 import {WeiPerEther} from "@ethersproject/constants";
 
 export default function usePendingReward(
-  farm: Farm
+  farm: any
 ) {
   const site = SITES[farm.site];
   const chef = useContract(site.chef, site.chefAbi);
